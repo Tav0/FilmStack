@@ -8,7 +8,7 @@ using Google Calendar so you can get the notification on your phone.
 
 Focus of this project is to get familiar with PHP, APACHE and MYSQL.
 
-I will be transferring the front-end to React.js
+I will be transferring the front-end to AngularJS
 
 # Design Implementation
 ## Main page
