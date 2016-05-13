@@ -1,0 +1,12 @@
+.carousel-inner>.item>a>img, .carousel-inner>.item>img {
+	width: 20vh;
+	height: 30vh;
+}
+
+.carousel-inner {
+	text-align: -webkit-center;
+}
+
+.movie-list {
+	margin: 10px 0 10px 0;
+}

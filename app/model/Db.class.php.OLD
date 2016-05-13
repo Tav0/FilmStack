@@ -1,0 +1,264 @@
+<?php
+
+class Db {
+
+	private static $_instance = null;
+	private $connection;
+
+	/*
+		Constructs the database
+	*/
+	private function __construct() {
+		$host = DB_HOST;
+		$database = DB_DATABASE;
+		$username = DB_USER;
+		$password = DB_PASS;
+
+		$this->connection = mysqli_connect($host, $username, $password, $database) or die('Error: Could not connect to MySQL database');
+	}
+
+	/*
+		Creates an instance of the Db class
+	*/
+	public static function instance() {
+		if(self::$_instance === null) {
+			self::$_instance = new Db();
+		}
+		return self::$_instance;
+	}
+
+	/*
+		Gets the first row in the specified table
+		
+		Returns false if the table name was empty or null
+		Returns the first row in the specified table otherwise
+	*/
+	public function getRow($table) {
+		$escaped_table = $this->connection->real_escape_string($table);
+		if($escaped_table === null || $escaped_table === "")
+			return false;
+		$query = sprintf("SELECT * FROM %s", $escaped_table);
+		$result = $this->connection->query($query);
+		return $result->fetch_assoc();
+	}
+
+	/*
+		Gets the first row in the specified table where the specified field
+		contains the specified value
+		
+		Returns false if any of the fields was empty or null
+		Returns the first row in the specified table where the specified field
+		contains the specified value otherwise
+	*/
+	public function getRowWhere($table, $field, $value) {
+		$escaped_table = $this->connection->real_escape_string($table);
+		$escaped_field = $this->connection->real_escape_string($field);
+		$escaped_value = $this->connection->real_escape_string($value);
+		if($escaped_table === null || $escaped_table === "" ||
+		$escaped_field === null || $escaped_field === "" ||
+		$escaped_value === null || $escaped_value === "")
+			return false;
+		$query = sprintf("SELECT * FROM %s WHERE %s = '%s'", $escaped_table, $escaped_field, $escaped_value);
+		$result = $this->connection->query($query);
+		return $result->fetch_assoc();
+	}
+
+	/*
+		Gets all the rows in the specified table
+		
+		Returns false if the table name was empty or null
+		Returns all the rows in the specified table otherwise
+	*/
+	public function getRows($table) {
+		$escaped_table = $this->connection->real_escape_string($table);
+		if($escaped_table === null || $escaped_table === "")
+			return false;
+		$query = sprintf("SELECT * FROM %s", $escaped_table);
+		$result = $this->connection->query($query);
+		return $result;
+	}
+
+	/*
+		Gets all the rows in the specified table where the specified field
+		contains the specified value
+		
+		Returns false if any of the fields was empty or null
+		Returns all the rows in the specified table where the specified field
+		contains the specified value otherwise
+	*/
+	public function getRowsWhere($table, $field, $value) {
+		$escaped_table = $this->connection->real_escape_string($table);
+		$escaped_field = $this->connection->real_escape_string($field);
+		$escaped_value = $this->connection->real_escape_string($value);
+		if($escaped_table === null || $escaped_table === "" ||
+		$escaped_field === null || $escaped_field === "" ||
+		$escaped_value === null || $escaped_value === "")
+			return false;
+		$query = sprintf("SELECT * FROM %s WHERE %s = '%s'", $escaped_table, $escaped_field, $escaped_value);
+		$result = $this->connection->query($query);
+		return $result;
+	}
+
+	/*
+		Creates a User in the Users table
+		
+		Returns false if any of the parameters are empty or null, or if the
+		insertion fails
+		Returns the UserID if successful
+	*/
+	public function createRowUser($username, $password, $email) {
+		$escaped_username = $this->connection->real_escape_string($username);
+		$escaped_password = $this->connection->real_escape_string($password);
+		$escaped_email = $this->connection->real_escape_string($email);
+		if($escaped_username === null || $escaped_username === "" ||
+		$escaped_password === null || $escaped_password === "" ||
+		$escaped_email === null || $escaped_email === "")
+			return false;
+		$query = sprintf("INSERT INTO Users (username, password, email) VALUES ('%s', '%s', '%s')", $escaped_username, $escaped_password, $escaped_email);
+		$result = $this->connection->query($query);
+		if($this->connection->affected_rows <= 0)
+			return false;
+		return $this->connection->insert_id;
+		
+	}
+
+	/*
+		This function creates a row in the to watch list
+		
+		Returns false if the ids are not integers or lower than 0, or if the rows
+		are not created
+		Returns true if successful
+	*/
+	public function createRowToWatch($listID, $movieID) {
+		if(!is_int($listID) || $listID < 0 || !is_int($movieID) || $movieID < 0)
+			return false;
+		$query = sprintf("INSERT INTO To_Watch (ListID, MovieID) VALUES (%d, %d)", $listID, $movieID);
+		$result = $this->connection->query($query);
+		if($this->connection->affected_rows <= 0)
+			return false;
+		return true;
+	}
+
+	/*
+		This function creates a row in the watched list
+		
+		Returns false if the ids are not integers or lower than 0, or if the rows
+		are not created
+		Returns true if successful
+	*/
+	public function createRowWatched($listID, $movieID) {
+		if(!is_int($listID) || $listID < 0 || !is_int($movieID) || $movieID < 0)
+			return false;
+		$query = sprintf("INSERT INTO Watched (ListID, MovieID) VALUES (%d, %d)", $listID, $movieID);
+		$result = $this->connection->query($query);
+		if($this->connection->affected_rows <= 0)
+			return false;
+		return true;
+	}
+
+	/*
+		Creates two entries in the List table that will relate a User to their
+		ToWatch and Watched lists
+		
+		Returns false if the userID is not an integer or lower than zero
+		Returns an array of the list ids if successful
+	*/
+	public function createRowsList($userID) {
+		$idArray = array();
+		if(!is_int($userID) || $userID < 0)
+			return false;
+		$query = sprintf("INSERT INTO Lists (UserID, TableName) Value (%d, 'To_Watch')", $userID);
+		$query2 = sprintf("INSERT INTO Lists (UserID, TableName) Value (%d, 'Watched')", $userID);
+		$result = $this->connection->query($query);
+		if($this->connection->affected_rows <= 0)
+			return false;
+		$idArray['To_Watch'] = $this->connection->insert_id;
+		$result2 = $this->connection->query($query2);
+		$idArray['Watched'] = $this->connection->insert_id;
+		if($this->connection->affected_rows <= 0)
+			return false;
+		return $idArray;
+	}
+
+	/*
+		Deletes a row from the to watch table
+		
+		Returns false if the ids are not integers or lower than 0, or if
+		the deletion fails
+		Returns true if the deletion was successful
+	*/
+	public function deleteRowToWatch($listID, $movieID) {
+		if(!is_int($listID) || $listID < 0 || !is_int($movieID) || $movieID < 0)
+			return false;
+		$query = sprintf("DELETE FROM To_Watch WHERE ListID = %d AND MovieID = %d", $listID, $movieID);
+		$result = $this->connection->query($query);
+		if($this->connection->affected_rows <= 0)
+			return false;
+		return true;
+	}
+
+	/*
+		Deletes a row from the watched table
+		
+		Returns false if the ids are not integers or lower than 0, or if the deletion
+		was unsuccessful
+		Returns true if the deletion was successful
+	*/
+	public function deleteRowWatched($listID, $movieID) {
+		if(!is_int($listID) || $listID < 0 || !is_int($movieID) || $movieID < 0)
+			return false;
+		$query = sprintf("DELETE FROM Watched WHERE ListID = %d AND MovieID = %d", $listID, $movieID);
+		$result = $this->connection->query($query);
+		if($this->connection->affected_rows <= 0)
+			return false;
+		return true;
+	}
+
+	/*
+		Creates a User and other necessary rows for a new User
+		
+		Returns false if any of the parameters are empty, the creation of any rows
+		fail, or the modification of the WatchedID and/or ToWatchID fail
+		Returns the UserID if successful
+	*/
+	public function createUser($username, $password, $email) {
+		$userID = $this->createRowUser($username, $password, $email);
+		if($userID === false)
+			return false;
+		$result = $this->createRowsList($userID);
+		if($result === false)
+			return false;
+		$query = sprintf("UPDATE Users SET ToWatchID = '%s', WatchedID = '%s' WHERE UserID = %d", $result['To_Watch'], $result['Watched'], $userID);
+		$this->connection->query($query);
+		if($this->connection->affected_rows <= 0)
+			return false;
+		return $userID;
+	}
+	
+	/*
+		Resets a user's password
+		
+		Returns false if the parameters are null/empty or if the userID is
+		not an integer or below zero
+	*/
+	public function updatePassword($userID, $new_password) {
+		$escaped_password = $this->connection->real_escape_string($new_password);
+		if(!is_int($userID) || $userID < 0 || $escaped_password === null || $escaped_password === "")
+			return false;
+		$query = sprintf("Update Users SET Password = '%s' WHERE UserID = %d", $escaped_password, $userID);
+		$result = $this->connection->query($query);
+		if($this->connection->affected_rows <= 0)
+			return false;
+		return true;
+	}
+	
+	/*
+		Returns the last error message
+	*/
+	public function getError() {
+		return $this->connection->error;
+	}
+
+}
+	
+?>

@@ -1,0 +1,13 @@
+#profile-feed {
+	height: 200px;
+	overflow-y: scroll;
+	border-style: solid;
+	border-width: 1px;
+	border-color: black;
+	margin-top: 1%;
+	margin-bottom: 1%;
+}
+
+#userInfo {
+	font-weight: 600;
+}

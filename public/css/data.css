@@ -1,0 +1,11 @@
+.ToWatch {
+	fill: green;
+}
+
+.Watched {
+	fill: orange;
+}
+
+.Public {
+	fill: blue;
+}

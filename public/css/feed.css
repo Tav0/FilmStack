@@ -1,0 +1,31 @@
+#home-feed span[class^="event-"] {
+  padding: 4px 6px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+#home-feed span.event-follow,
+#home-feed span.event-unfollow {
+  background-color: #adadad;
+}
+
+#home-feed span.event-movie-review {
+  background-color: #ec971f;
+}
+
+#home-feed span.event-movie-endorse {
+  background-color: #449d44;
+}
+
+#home-feed span.event-movie-watch {
+  background-color: #31b0d5;
+}
+
+#home-feed span.event-movie-watched {
+  background-color: #025aa5;
+}
+
+#home-feed span[class^="event-"] a {
+  color: #fff;
+  font-weight: bold;
+}

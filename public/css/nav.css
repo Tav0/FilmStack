@@ -1,0 +1,95 @@
+.nav-container {
+  width: 100%;
+  height: 100%;
+}
+
+.navbar {
+	min-height: 40px !important;
+	margin-bottom: 0 !important;
+}
+
+.dropdown-menu {
+	right: 0 !important;
+	/*left: auto !important;*/
+}
+
+.title {
+  position: fixed;
+  margin-left: auto;
+  margin-right: auto;
+  text-transform: uppercase;
+  color: #00afec;
+  z-index: 11;
+}
+
+.title.app {
+  right: 3%;
+  font-size: 2em;
+  width: 250px;
+  text-align: center;
+  font-weight: 700;
+  height: 50px;
+}
+
+@media (min-width: $screen-sm-min) {
+  font-size: 2.2em;
+}
+
+@media (min-width:$screen-md-min) {
+  font-size: 2.5em;
+}
+
+.title.profile-bar {
+  right: 3%;
+  height: 35px;
+}
+
+.profile-pic {
+  @extend .icon-circle;
+  background-size: cover;
+}
+
+.profile-name {
+  font-size: 0.7em;
+  font-weight: 100;
+  display: inline-block;
+  margin: 0;
+}
+
+.profile-link {
+  padding-left: 5px;
+  padding-top: 12px;
+  font-size: .7em;
+  font-weight: 600;
+}
+
+.profile-link.btn-link:hover,
+.profile-link.btn-link:focus {
+  text-decoration: none;
+}
+
+.dropdown-menu {
+  top: 90%;
+}
+
+li {
+  font-size: 1em;
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+li#loginForm {
+	margin: 5px 0 5px 0;
+}
+
+li#loginForgotPass {
+	margin: 5px 0 5px 0;
+}
+
+form > div > input {
+	font-size: 1.2em !important;
+}
+
+form > button {
+	font-size: 1.2em !important;
+}

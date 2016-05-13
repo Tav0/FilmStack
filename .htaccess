@@ -1,0 +1,46 @@
+Options -Indexes
+
+RewriteEngine on
+
+# Site Controller
+RewriteRule ^$ app/controller/siteController.php?action=main [QSA,L]
+RewriteRule ^login/?$ app/controller/siteController.php?action=login [QSA,L]
+RewriteRule ^logout/?$ app/controller/siteController.php?action=logout [QSA,L]
+RewriteRule ^profile/(\d+)?$ app/controller/siteController.php?action=profile&profileid=$1 [QSA,L]
+RewriteRule ^graph/?$ app/controller/siteController.php?action=graph [QSA,L]
+RewriteRule ^graphdata/?$ app/controller/siteController.php?action=graphdata [QSA,L]
+RewriteRule ^search/(.+)/(\d+)/?$ app/controller/siteController.php?action=search&searchterm=$1&page=$2 [QSA,L]
+RewriteRule ^search/(.+)/?$ app/controller/siteController.php?action=search&searchterm=$1 [QSA,L]
+RewriteRule ^search/?$ app/controller/siteController.php?action=search [QSA,L]
+RewriteRule ^credits/?$ app/controller/siteController.php?action=credits [QSA,L]
+
+# Account Controller
+RewriteRule ^signup/?$ app/controller/accountController.php?action=signup [QSA,L]
+RewriteRule ^password/(.+)$ app/controller/accountController.php?action=password&password=$1 [QSA,L]
+RewriteRule ^settings/?$ app/controller/accountController.php?action=settings [QSA,L]
+RewriteRule ^username/(.+)$ app/controller/accountController.php?action=username&username=$1 [QSA,L]
+RewriteRule ^email/(.+)$ app/controller/accountController.php?action=email&email=$1 [QSA,L]
+RewriteRule ^firstname/(.+)$ app/controller/accountController.php?action=firstname&firstname=$1 [QSA,L]
+RewriteRule ^lastname/(.+)$ app/controller/accountController.php?action=lastname&lastname=$1 [QSA,L]
+RewriteRule ^profile/(\d+)/follow/?$ app/controller/accountController.php?action=follow&profileid=$1 [QSA,L]
+RewriteRule ^profile/(\d+)/unfollow/?$ app/controller/accountController.php?action=unfollow&profileid=$1 [QSA,L]
+RewriteRule ^moderator/?$ app/controller/accountController.php?action=moderator [QSA,L]
+RewriteRule ^ismoderator/(.+)$ app/controller/accountController.php?action=ismoderator&username=$1 [QSA,L]
+RewriteRule ^promote/?$ app/controller/accountController.php?action=promote [QSA,L]
+RewriteRule ^getuserdata/?$ app/controller/accountController.php?action=getuserdata [QSA,L]
+
+# Movie Controller
+RewriteRule ^movie/(\d+)$ app/controller/movieController.php?action=movie&id=$1 [QSA,L]
+RewriteRule ^genres/?$ app/controller/movieController.php?action=genres [QSA,L]
+RewriteRule ^genre/(\d+)/?$ app/controller/movieController.php?action=genre&id=$1 [QSA,L]
+RewriteRule ^genre/(\d+)/(\d+)/?$ app/controller/movieController.php?action=genrepage&id=$1&page=$2 [QSA,L]
+
+# List Controller
+RewriteRule ^watch/?$ app/controller/listController.php?action=watch [QSA,L]
+RewriteRule ^watched/?$ app/controller/listController.php?action=watched [QSA,L]
+RewriteRule ^remove/?$ app/controller/listController.php?action=remove [QSA,L]
+RewriteRule ^list/(\d+)?$ app/controller/listController.php?action=list&listsownerid=$1 [QSA,L]
+
+# Review Controller
+RewriteRule ^entercomment/?$ app/controller/reviewController.php?action=entercomment [QSA,L]
+RewriteRule ^bancomment/?$ app/controller/reviewController.php?action=bancomment [QSA,L]
